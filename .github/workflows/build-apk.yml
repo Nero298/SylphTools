@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - name: Checkout code
@@ -35,8 +36,39 @@ jobs:
       - name: Run analyzer (non-blocking)
         run: flutter analyze || true
 
+      - name: Check for stale native build cache
+        run: |
+          if [ -d android/app/.cxx ]; then
+            echo "WARNING: android/app/.cxx already exists before build!"
+            find android/app/.cxx -name "CMakeCache.txt"
+          else
+            echo "Clean: no .cxx dir yet, this is a fresh native configure."
+          fi
+
       - name: Build APK (arm64-v8a)
-        run: flutter build apk --release --target-platform android-arm64 --split-per-abi
+        run: |
+          flutter build apk --release --target-platform android-arm64 --split-per-abi 2>&1 | tee build_log.txt
+        continue-on-error: true
+
+      - name: Show native build details
+        if: always()
+        run: |
+          echo "=== Lines mentioning Luau.VM in the build log ==="
+          grep -n "Luau.VM" build_log.txt | head -40 || echo "(none found)"
+          echo ""
+          echo "=== Lines mentioning 'Building CXX object' (what actually got compiled) ==="
+          grep -n "Building CXX object" build_log.txt | head -60 || echo "(none found)"
+          echo ""
+          echo "=== Last 150 lines of the full build log ==="
+          tail -150 build_log.txt
+          echo ""
+          echo "=== Final check: did the APK get produced? ==="
+          if [ -f build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ]; then
+            echo "APK exists — build actually succeeded despite earlier errors in log."
+          else
+            echo "APK missing — build genuinely failed. Failing this job now."
+            exit 1
+          fi
 
       - name: Rename APK with version
         run: |

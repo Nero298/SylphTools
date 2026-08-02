@@ -64,10 +64,19 @@ class _ToolsHubBody extends StatelessWidget {
               _ToolCard(
                 icon: Icons.terminal_rounded,
                 iconColor: AppColors.green,
-                title: 'Script Runner & UNC Checker',
+                title: 'Script Runner',
                 subtitle:
-                    'Run Luau code and check UNC function availability — on-device',
+                    'Run Luau code on-device, with a live GUI preview for scripts that build UI',
                 onTap: () => Get.toNamed(AppRoutes.scriptRunner),
+              ),
+              const SizedBox(height: 10),
+              _ToolCard(
+                icon: Icons.fact_check_rounded,
+                iconColor: AppColors.orange,
+                title: 'UNC Checker',
+                subtitle:
+                    'Check UNC-style function availability in this sandbox — on-device',
+                onTap: () => Get.toNamed(AppRoutes.uncChecker),
               ),
               const SizedBox(height: 10),
               _ToolCard(

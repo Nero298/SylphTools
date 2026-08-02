@@ -9,6 +9,7 @@ import '../screens/logs_screen.dart';
 import '../screens/lua_tools_screen.dart';
 import '../screens/tools_hub_screen.dart';
 import '../screens/script_runner_screen.dart';
+import '../screens/unc_checker_screen.dart';
 
 class AppRoutes {
   static const splash = '/splash';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const luaTools = '/lua-tools';
   static const toolsHub = '/tools-hub';
   static const scriptRunner = '/script-runner';
+  static const uncChecker = '/unc-checker';
 
   static final pages = [
     GetPage(name: splash, page: () => const SplashScreen()),
@@ -57,6 +59,11 @@ class AppRoutes {
     GetPage(
       name: scriptRunner,
       page: () => const ScriptRunnerScreen(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: uncChecker,
+      page: () => const UncCheckerScreen(),
       transition: Transition.rightToLeft,
     ),
   ];

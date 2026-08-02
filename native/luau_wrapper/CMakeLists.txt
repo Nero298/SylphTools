@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
-set(LUAU_BUILD_CLI OFF CACHE BOOL "" FORCE)
-set(LUAU_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+option(LUAU_BUILD_CLI "" OFF)
+option(LUAU_BUILD_TESTS "" OFF)
 
 FetchContent_Declare(
   luau
@@ -28,11 +28,21 @@ target_include_directories(sylph_luau PRIVATE
   ${luau_SOURCE_DIR}/Common/include
 )
 
-target_link_libraries(sylph_luau PRIVATE
-  Luau.VM
-  Luau.Compiler
-  Luau.Ast
-)
+if(ANDROID OR UNIX)
+  target_link_libraries(sylph_luau PRIVATE
+    -Wl,--whole-archive
+    Luau.VM
+    Luau.Compiler
+    Luau.Ast
+    -Wl,--no-whole-archive
+  )
+else()
+  target_link_libraries(sylph_luau PRIVATE
+    Luau.VM
+    Luau.Compiler
+    Luau.Ast
+  )
+endif()
 
 if(ANDROID)
   target_link_libraries(sylph_luau PRIVATE log)

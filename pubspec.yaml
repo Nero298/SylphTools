@@ -24,6 +24,7 @@ dependencies:
   http: ^1.2.2                     # HTTP requests + model downloading
   webview_flutter: ^4.10.0         # Embedded browser for Perchance / Piwi AI
   url_launcher: ^6.3.1             # "Open in browser" fallback for WebView screens
+  ffi: ^2.1.3                      # Dart FFI helpers for the native Luau runtime
 
   # ── File System ─────────────────────────────────────────────────
   path_provider: ^2.1.5            # App documents / downloads dir

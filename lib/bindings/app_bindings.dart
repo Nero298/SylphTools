@@ -7,6 +7,7 @@ import '../services/local_api_server_service.dart';
 import '../services/wakelock_service.dart';
 import '../services/log_service.dart';
 import '../services/leakd_service.dart';
+import '../services/luau_runner_service.dart';
 import '../controllers/chat_controller.dart';
 import '../controllers/model_controller.dart';
 import '../controllers/theme_controller.dart';
@@ -23,6 +24,7 @@ class AppBindings extends Bindings {
     Get.lazyPut(() => WakelockService(), fenix: true);
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => LeakdService(), fenix: true);
+    Get.lazyPut(() => LuauRunnerService(), fenix: true);
 
     // ── Controllers ──────────────────────────────────────────────
     Get.put(

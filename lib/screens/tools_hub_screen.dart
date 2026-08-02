@@ -62,6 +62,15 @@ class _ToolsHubBody extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _ToolCard(
+                icon: Icons.terminal_rounded,
+                iconColor: AppColors.green,
+                title: 'Script Runner & UNC Checker',
+                subtitle:
+                    'Run Luau code and check UNC function availability — on-device',
+                onTap: () => Get.toNamed(AppRoutes.scriptRunner),
+              ),
+              const SizedBox(height: 10),
+              _ToolCard(
                 icon: Icons.image_outlined,
                 iconColor: AppColors.custom,
                 title: 'Generate Image',

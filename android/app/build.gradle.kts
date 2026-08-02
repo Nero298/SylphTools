@@ -28,6 +28,27 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // Only building for arm64-v8a keeps the native Luau compile time
+        // and APK size down — matches the Dart side's arm64-only CI build.
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
+
+        externalNativeBuild {
+            cmake {
+                // Luau's compiler component requires C++17.
+                cppFlags += "-std=c++17"
+                arguments += listOf("-DANDROID_STL=c++_shared")
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = file("../../native/luau_wrapper/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 
     buildTypes {

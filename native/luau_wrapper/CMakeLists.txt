@@ -8,7 +8,7 @@ include(FetchContent)
 
 option(LUAU_BUILD_CLI "" OFF)
 option(LUAU_BUILD_TESTS "" OFF)
-
+option(LUAU_EXTERN_C "" ON)
 FetchContent_Declare(
   luau
   GIT_REPOSITORY https://github.com/luau-lang/luau.git

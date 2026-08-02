@@ -56,13 +56,17 @@ constexpr int kMaxInstructionsBeforeAbort = 100'000'000;
 thread_local long long g_instructionCount = 0;
 thread_local bool g_timedOut = false;
 
-void bridge_interrupt(lua_State* L, int /*gc*/)
+void bridge_interrupt(lua_State* L, int gc)
 {
+    if (gc >= 0)
+        return;
+
     g_instructionCount++;
     if (g_instructionCount > kMaxInstructionsBeforeAbort)
     {
         g_timedOut = true;
-        luaL_error(L, "Script exceeded the instruction limit (possible infinite loop)");
+        lua_pushstring(L, "Script exceeded the instruction limit (possible infinite loop)");
+        lua_error(L);
     }
 }
 

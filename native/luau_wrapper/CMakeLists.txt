@@ -4,10 +4,11 @@ project(sylph_luau)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# ── Fetch Luau source at configure time ──────────────────────────
-# Pinned to a specific release tag for build reproducibility — bump
-# this manually when you want to pick up newer Luau language features.
 include(FetchContent)
+
+set(LUAU_BUILD_CLI OFF CACHE BOOL "" FORCE)
+set(LUAU_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
 FetchContent_Declare(
   luau
   GIT_REPOSITORY https://github.com/luau-lang/luau.git
@@ -16,7 +17,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(luau)
 
-# ── Our thin extern "C" wrapper ───────────────────────────────────
 add_library(sylph_luau SHARED
   luau_bridge.cpp
 )
@@ -28,15 +28,12 @@ target_include_directories(sylph_luau PRIVATE
   ${luau_SOURCE_DIR}/Common/include
 )
 
-# Link against Luau's own CMake targets (built as part of FetchContent).
-# Luau.VM = runtime/interpreter, Luau.Compiler = source -> bytecode.
 target_link_libraries(sylph_luau PRIVATE
   Luau.VM
   Luau.Compiler
   Luau.Ast
 )
 
-# Android NDK sets this; on other platforms this is a no-op.
 if(ANDROID)
   target_link_libraries(sylph_luau PRIVATE log)
 endif()
